@@ -1,0 +1,465 @@
+/* ===== RESET & BASE =====
+   This section gives the whole site a predictable starting point.
+   It removes browser default spacing, defines the shared color palette as CSS variables,
+   and sets the global typography/background rules used everywhere else. */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#faf8f5;--fg:#242a35;--card:#fff;--border:#e8e2d9;--muted:#94897c;
+  --accent:#c4923a;--accent-fg:#fff;--primary:#242a35;--primary-fg:#faf8f5;
+  --secondary:#f0ece6;--destructive:#e53935;--gold:#c4923a;--cream:#f7f3ec;
+  --taupe:#b3a594;--radius:6px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+h1,h2,h3,h4,h5,h6{font-family:'Playfair Display',serif;line-height:1.2}
+a{text-decoration:none;color:inherit}
+img{max-width:100%;display:block}
+.container{max-width:1280px;margin:0 auto;padding:0 16px}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* ===== BUTTONS =====
+   These are reusable button styles.
+   The project mixes and matches these classes to create the different button looks
+   without rewriting button CSS for every page section. */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 24px;border-radius:var(--radius);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;transition:all .2s}
+.btn-primary{background:var(--primary);color:var(--primary-fg)}
+.btn-primary:hover{opacity:.9}
+.btn-accent{background:var(--accent);color:var(--accent-fg)}
+.btn-accent:hover{opacity:.9}
+.btn-outline{border:1px solid var(--border);background:transparent;color:var(--fg)}
+.btn-outline:hover{background:var(--secondary)}
+.btn-destructive{background:var(--destructive);color:#fff}
+.btn-sm{padding:6px 14px;font-size:11px}
+.btn-lg{padding:14px 32px;font-size:13px}
+
+/* ===== TOP BAR =====
+   Thin announcement strip above the main header for promos and coupon reminders. */
+.top-bar{background:var(--primary);color:var(--primary-fg);text-align:center;font-size:11px;padding:6px;letter-spacing:.08em}
+
+/* ===== HEADER =====
+   The header is sticky so shopping controls remain reachable while scrolling.
+   It also uses a translucent background + blur to feel layered above the page content. */
+.header{position:sticky;top:0;z-index:100;background:rgba(250,248,245,.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;height:96px}
+.logo{display:flex;align-items:center;gap:8px;font-family:'Playfair Display',serif;font-size:22px;font-weight:700;letter-spacing:-.02em}
+.logo img{height:80px;width:120px;display:block;object-fit:contain}
+.gold-dot{color:var(--gold)} /* kept for any remaining dotted text usage */
+.nav-desktop{display:flex;gap:28px}
+.nav-desktop a{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:color .2s}
+.nav-desktop a:hover{color:var(--accent)}
+.sale-link{color:var(--destructive)!important;font-weight:600!important}
+.header-actions{display:flex;align-items:center;justify-content:flex-end;gap:6px;min-width:260px}
+.icon-btn{position:relative;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background .2s}
+.icon-btn:hover{background:var(--secondary)}
+.search-toggle.active{background:var(--secondary);color:var(--accent)}
+.badge{position:absolute;top:-2px;right:-2px;background:var(--accent);color:var(--accent-fg);font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.mobile-menu-btn{display:none;font-size:20px;width:36px;height:36px}
+.search-chip{
+  /* Start fully collapsed so it behaves like an expandable inline search control. */
+  width:0;
+  opacity:0;
+  overflow:hidden;
+  pointer-events:none;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:40px;
+  padding:0;
+  border:1px solid transparent;
+  border-radius:12px;
+  background:rgba(255,255,255,.78);
+  box-shadow:0 0 0 0 rgba(196,146,58,0);
+  transition:width .28s ease, opacity .2s ease, padding .28s ease, border-color .28s ease, box-shadow .28s ease;
+}
+.search-chip.open{
+  /* Opening state: width, padding, border, and glow are animated to mimic a compact luxury search field. */
+  width:210px;
+  opacity:1;
+  padding:0 10px 0 14px;
+  pointer-events:auto;
+  border-color:var(--accent);
+  box-shadow:0 0 0 3px rgba(196,146,58,.12);
+}
+.search-chip input{
+  flex:1;
+  min-width:0;
+  background:transparent;
+  border:none;
+  outline:none;
+  font-size:14px;
+  color:var(--fg);
+}
+.search-chip input::placeholder{color:#7d8797}
+.search-close-btn{
+  width:24px;
+  height:24px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--fg);
+  font-size:14px;
+  border-radius:50%;
+  transition:background .2s,color .2s;
+}
+.search-close-btn:hover{background:var(--secondary);color:var(--accent)}
+.legacy-search-bar{display:none!important}
+/* This hides the old full-width search row so only the new compact search UI is used. */
+
+/* ===== MOBILE NAV =====
+   Full-screen overlay + side panel shown on small screens when the hamburger menu is tapped. */
+.mobile-nav-overlay{display:none;position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.4)}
+.mobile-nav-overlay.open{display:block}
+.mobile-nav-panel{position:absolute;left:0;top:0;bottom:0;width:280px;background:var(--bg);padding:24px;display:flex;flex-direction:column;gap:12px}
+.mobile-nav-panel h3{font-size:20px;margin-bottom:8px}
+.mobile-nav-panel a{font-size:14px;padding:8px 0;border-bottom:1px solid var(--border)}
+.mobile-nav-close{align-self:flex-end;font-size:20px}
+
+/* ===== HERO =====
+   Large first-screen banner with slides.
+   Each slide is stacked on top of the others and we fade the active one in/out with opacity. */
+.hero{position:relative;height:70vh;overflow:hidden}
+.hero-slide{position:absolute;inset:0;opacity:0;transition:opacity 1s}
+.hero-slide.active{opacity:1}
+.hero-slide img{width:100%;height:100%;object-fit:cover;transition:transform 10s ease}
+/* Slow zoom adds a more editorial / premium feeling while the slide is visible. */
+.hero-slide.active img{transform:scale(1.06)}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(0,0,0,.6),rgba(0,0,0,.15),transparent)}
+.hero-content{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-start;padding-left:6vw}
+.hero-content .container{display:flex;align-items:center;height:100%;padding:0;margin:0;max-width:100%}
+.hero-text{color:#fff;max-width:520px;margin-left:0;padding-left:0}
+.hero-text h1{font-size:clamp(32px,5vw,56px);font-weight:700;margin-bottom:12px}
+.hero-text p{font-size:clamp(15px,2vw,20px);opacity:.8;margin-bottom:28px}
+.hero-dots{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:8px}
+.hero-dot{height:5px;border-radius:4px;background:rgba(255,255,255,.4);border:none;transition:all .3s}
+.hero-dot.active{width:32px;background:#fff}
+.hero-dot:not(.active){width:16px}
+.hero-arrows button{position:absolute;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.7);font-size:28px;background:none;border:none;transition:color .2s}
+.hero-arrows button:hover{color:#fff}
+.hero-prev{left:16px}
+.hero-next{right:16px}
+
+/* ===== SECTIONS =====
+   Shared spacing and header patterns reused across home and inner pages. */
+.section{padding:48px 0}
+.section-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:32px}
+.section-header h2{font-size:28px;font-weight:700}
+.view-all{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .2s}
+.view-all:hover{color:var(--accent)}
+
+/* ===== PRODUCT GRID =====
+   Card-based layout for catalog items.
+   The hover states try to make products feel tactile without using heavy animation. */
+.product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.product-card{background:var(--card);border-radius:var(--radius);overflow:hidden;transition:box-shadow .3s;cursor:pointer}
+.product-card:hover{box-shadow:0 8px 30px rgba(0,0,0,.08)}
+.product-card-img{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--secondary)}
+/* The fixed aspect ratio keeps cards neat even before images fully load. */
+.product-card-img img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.product-card:hover .product-card-img img{transform:scale(1.05)}
+.product-badges{position:absolute;top:8px;left:8px;display:flex;flex-direction:column;gap:4px}
+.badge-tag{padding:3px 8px;font-size:9px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:2px}
+.badge-sale{background:var(--destructive);color:#fff}
+.badge-new{background:var(--primary);color:var(--primary-fg)}
+.product-wishlist-btn{position:absolute;top:8px;right:8px;width:32px;height:32px;background:rgba(255,255,255,.9);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
+.product-card:hover .product-wishlist-btn{opacity:1}
+.product-wishlist-btn.active{opacity:1;color:var(--destructive)}
+.product-card-info{padding:12px}
+.product-brand{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.product-name{font-size:14px;font-weight:500;margin:4px 0}
+.product-price{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600}
+.product-price .original{text-decoration:line-through;color:var(--muted);font-weight:400;font-size:12px}
+.product-price .discount{color:var(--destructive)}
+.product-rating{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);margin-top:4px}
+.stars{color:var(--gold)}
+
+/* ===== CATEGORIES GRID =====
+   Visual shortcuts into top-level store categories. */
+.categories-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.category-card{position:relative;aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;cursor:pointer}
+.category-card img{width:100%;height:100%;object-fit:cover;transition:transform .5s}
+.category-card:hover img{transform:scale(1.1)}
+.category-card-overlay{position:absolute;inset:0;background:rgba(0,0,0,.3);transition:background .3s}
+.category-card:hover .category-card-overlay{background:rgba(0,0,0,.4)}
+.category-card span{position:absolute;bottom:16px;left:16px;color:#fff;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500}
+
+/* ===== BANNER =====
+   Wide promotional section used to break up product grids with a campaign message. */
+.promo-banner{position:relative;border-radius:var(--radius);overflow:hidden;height:280px}
+.promo-banner img{width:100%;height:100%;object-fit:cover}
+.promo-banner-overlay{position:absolute;inset:0;background:linear-gradient(to right,rgba(36,42,53,.8),transparent);display:flex;align-items:center;padding:0 48px}
+.promo-banner-text .tag{font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+.promo-banner-text h2{color:#fff;font-size:clamp(24px,3vw,36px);margin-bottom:8px}
+.promo-banner-text p{color:rgba(255,255,255,.7);font-size:14px;margin-bottom:20px}
+
+/* ===== NEWSLETTER =====
+   Simple email capture area with centered layout to create a pause near the bottom of the home page. */
+.newsletter{background:var(--secondary);padding:64px 0;text-align:center}
+.newsletter h2{font-size:28px;margin-bottom:8px}
+.newsletter p{color:var(--muted);font-size:14px;margin-bottom:24px}
+.newsletter-form{display:flex;gap:8px;max-width:400px;margin:0 auto}
+.newsletter-form input{flex:1;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;outline:none}
+
+/* ===== SHOP PAGE =====
+   Two-column layout: filters on the left, products on the right.
+   On mobile, the sidebar becomes an off-canvas panel. */
+.shop-layout{display:grid;grid-template-columns:240px 1fr;gap:32px}
+.shop-sidebar{display:flex;flex-direction:column;gap:24px}
+.filter-group h4{font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:600;margin-bottom:12px;color:var(--muted)}
+.filter-group label{display:flex;align-items:center;gap:8px;font-size:13px;padding:4px 0;cursor:pointer}
+.filter-group input[type="checkbox"]{accent-color:var(--accent);width:14px;height:14px}
+.shop-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.shop-header h1{font-size:28px}
+.sort-select{padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;outline:none;background:var(--card)}
+.results-count{font-size:13px;color:var(--muted)}
+.mobile-filter-btn{display:none}
+
+/* ===== PRODUCT DETAIL =====
+   Product page uses a two-column composition:
+   image gallery on one side, buying decisions (price, size, color, quantity) on the other. */
+.product-detail{display:grid;grid-template-columns:1fr 1fr;gap:48px;padding:48px 0}
+.pd-gallery{display:flex;flex-direction:column;gap:12px}
+.pd-main-img{aspect-ratio:3/4;border-radius:var(--radius);overflow:hidden;background:var(--secondary)}
+.pd-main-img img{width:100%;height:100%;object-fit:cover}
+.pd-thumbs{display:flex;gap:8px}
+.pd-thumb{width:72px;height:90px;border-radius:4px;overflow:hidden;border:2px solid transparent;cursor:pointer;opacity:.6;transition:all .2s}
+.pd-thumb.active{border-color:var(--accent);opacity:1}
+.pd-thumb img{width:100%;height:100%;object-fit:cover}
+.pd-info{display:flex;flex-direction:column;gap:16px}
+.pd-brand{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pd-name{font-size:28px;font-weight:600}
+.pd-rating{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.pd-price{font-size:24px;font-weight:700;display:flex;align-items:center;gap:8px}
+.pd-price .original{font-size:16px;text-decoration:line-through;color:var(--muted);font-weight:400}
+.pd-price .save-tag{font-size:11px;background:var(--destructive);color:#fff;padding:2px 8px;border-radius:2px}
+.pd-desc{font-size:14px;line-height:1.7;color:var(--muted)}
+.pd-options h4{font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.size-options,.color-options{display:flex;gap:8px;flex-wrap:wrap}
+.size-btn{padding:8px 16px;border:1px solid var(--border);border-radius:var(--radius);font-size:12px;font-weight:500;transition:all .2s}
+.size-btn:hover,.size-btn.active{border-color:var(--primary);background:var(--primary);color:var(--primary-fg)}
+.color-swatch{width:28px;height:28px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+.color-swatch:hover,.color-swatch.active{border-color:var(--primary);transform:scale(1.15)}
+.qty-row{display:flex;align-items:center;gap:12px}
+.qty-control{display:flex;align-items:center;border:1px solid var(--border);border-radius:var(--radius)}
+.qty-control button{width:36px;height:36px;font-size:16px;display:flex;align-items:center;justify-content:center}
+.qty-control span{width:40px;text-align:center;font-size:14px;font-weight:500}
+.pd-actions{display:flex;gap:12px}
+.pd-actions .btn{flex:1}
+.stock-status{font-size:12px;display:flex;align-items:center;gap:6px}
+.stock-dot{width:8px;height:8px;border-radius:50%}
+.in-stock .stock-dot{background:#4caf50}
+.low-stock .stock-dot{background:#ff9800}
+
+/* ===== REVIEWS =====
+   Review styles support both the product detail summary block and the full reviews page.
+   The sticky summary panel helps users keep the rating context while reading comments. */
+.review-section{margin-top:32px;padding:32px 0;border-top:1px solid var(--border)}
+.review-grid{display:grid;grid-template-columns:320px 1fr;gap:24px}
+.review-summary{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;position:sticky;top:120px}
+.review-score{display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.review-score .score-number{font-size:36px;font-weight:700}
+.review-score .score-stars{color:var(--gold);font-size:16px}
+.review-score .score-count{font-size:13px;color:var(--muted)}
+.review-bars{display:flex;flex-direction:column;gap:6px;margin:12px 0}
+.rating-row{display:grid;grid-template-columns:36px 1fr 32px;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.rating-bar{background:var(--secondary);height:8px;border-radius:8px;overflow:hidden}
+.rating-bar span{display:block;height:100%;background:var(--accent)}
+.rating-count{font-weight:700;color:var(--fg);font-size:12px;text-align:right}
+.review-note{font-size:12px;color:var(--muted);margin-top:8px}
+.review-list{display:flex;flex-direction:column;gap:12px}
+.review-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:0 6px 16px rgba(0,0,0,.02)}
+.review-card-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.reviewer{font-weight:700;font-size:14px}
+.review-date{font-size:12px;color:var(--muted)}
+.review-message{margin-top:10px;font-size:14px;line-height:1.6;color:var(--fg)}
+.verified-badge{font-size:11px;color:#2e7d32;background:#e8f5e9;padding:4px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.review-form{margin-top:24px;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.review-form h3{font-size:18px;margin-bottom:4px}
+.review-form-note{font-size:13px;color:var(--muted);margin-bottom:12px}
+.rating-picker{display:flex;gap:6px}
+.rating-star{font-size:20px;width:36px;height:36px;border:1px solid var(--border);border-radius:50%;background:var(--card);color:var(--muted);transition:all .2s}
+.rating-star.active,.rating-star:hover{background:var(--gold);color:#fff;border-color:var(--gold)}
+.review-form textarea{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-family:inherit;font-size:14px;min-height:90px}
+
+.reviews-page{padding:32px 0}
+.reviews-header{display:flex;gap:16px;align-items:center;margin-bottom:20px}
+.back-link{border:none;background:transparent;color:var(--accent);font-weight:700;cursor:pointer;padding:6px 0;display:flex;align-items:center;gap:6px}
+.back-link:hover{text-decoration:underline}
+.review-list-full{display:flex;flex-direction:column;gap:14px;margin-bottom:18px}
+.review-card-full{border:1px solid var(--border);background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:0 10px 26px rgba(0,0,0,0.04)}
+.review-pagination{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.pager-btn{min-width:38px;height:36px;border:1px solid var(--border);background:#fff;border-radius:6px;font-weight:600;cursor:pointer}
+.pager-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+.pager-btn:disabled{opacity:.35;cursor:not-allowed}
+.pager-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+/* ===== CART =====
+   Cart is laid out as items on the left and the running order summary on the right. */
+.cart-layout{display:grid;grid-template-columns:1fr 360px;gap:32px;padding:48px 0}
+.cart-item{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--border)}
+.cart-item-img{width:100px;height:130px;border-radius:var(--radius);overflow:hidden;flex-shrink:0}
+.cart-item-img img{width:100%;height:100%;object-fit:cover}
+.cart-item-info{flex:1;display:flex;flex-direction:column;justify-content:space-between}
+.cart-item-top{display:flex;justify-content:space-between}
+.cart-item-name{font-weight:500;font-size:14px}
+.cart-item-brand{font-size:11px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.cart-item-meta{font-size:12px;color:var(--muted);margin-top:4px}
+.cart-item-bottom{display:flex;align-items:center;justify-content:space-between}
+.cart-item-price{font-weight:600;font-size:15px}
+.remove-btn{font-size:11px;color:var(--muted);text-decoration:underline;cursor:pointer}
+.remove-btn:hover{color:var(--destructive)}
+.cart-summary{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;height:fit-content;position:sticky;top:100px}
+.cart-summary h3{font-size:18px;margin-bottom:16px}
+.summary-row{display:flex;justify-content:space-between;font-size:14px;padding:6px 0}
+.summary-row.total{font-weight:700;font-size:16px;border-top:1px solid var(--border);padding-top:12px;margin-top:8px}
+.coupon-row{display:flex;gap:8px;margin:16px 0}
+.coupon-row input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px}
+.empty-state{text-align:center;padding:80px 20px}
+.empty-state h2{font-size:24px;margin-bottom:8px}
+.empty-state p{color:var(--muted);margin-bottom:20px}
+
+/* ===== CHECKOUT =====
+   Checkout styles support a multi-step experience while staying in the same single-page app. */
+.checkout-layout{max-width:640px;margin:0 auto;padding:48px 16px}
+.checkout-steps{display:flex;gap:4px;margin-bottom:32px}
+.checkout-step{flex:1;padding:10px;text-align:center;font-size:11px;letter-spacing:.08em;text-transform:uppercase;background:var(--secondary);border-radius:var(--radius);color:var(--muted)}
+.checkout-step.active{background:var(--primary);color:var(--primary-fg)}
+.checkout-step.done{background:var(--accent);color:var(--accent-fg)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;color:var(--muted)}
+.form-group input,.form-group select{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;outline:none;font-family:inherit}
+.form-group input:focus{border-color:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.delivery-option{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;margin-bottom:8px;transition:border-color .2s}
+.delivery-option.selected{border-color:var(--accent);background:var(--cream)}
+.delivery-option input{accent-color:var(--accent)}
+.order-confirmed{text-align:center;padding:60px 20px}
+.order-confirmed h1{color:var(--accent);font-size:32px;margin-bottom:12px}
+.order-number{font-size:18px;font-weight:600;background:var(--secondary);padding:12px 24px;border-radius:var(--radius);display:inline-block;margin:16px 0}
+.checkout-mpesa{margin-top:16px;padding:14px;border:1px dashed var(--border);border-radius:var(--radius);background:var(--secondary)}
+.checkout-mpesa-panel{padding:22px;border:1px solid rgba(17,117,60,.18);background:linear-gradient(180deg,#f8fff9 0%,#eef8f0 100%);box-shadow:0 20px 40px rgba(17,117,60,.08)}
+.checkout-mpesa-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:4px}
+.checkout-mpesa-mark{width:72px;min-width:72px;height:72px;border-radius:22px;background:linear-gradient(145deg,#19a74d 0%,#0d6f31 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),0 16px 30px rgba(13,111,49,.18)}
+.checkout-mpesa-mark-dot{width:12px;height:12px;border-radius:50%;background:#dff5e5;display:block;margin-bottom:6px}
+.checkout-mpesa-mark-text{font-size:11px;letter-spacing:.18em;font-weight:900;color:#fff}
+.checkout-mpesa-badge{display:inline-flex;align-items:center;padding:6px 10px;border-radius:999px;background:#dff5e5;color:#11753c;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.checkout-mpesa-title{font-weight:800;font-size:22px;color:#0e5f31}
+.checkout-mpesa-note{font-size:13px;color:#4b6352;line-height:1.6;max-width:460px}
+.checkout-mpesa-tip{margin-top:10px;font-size:12px;color:#3a5b44}
+.checkout-mpesa-field input{border:1px solid rgba(17,117,60,.22);background:#fff}
+.checkout-mpesa-field input:focus{border-color:#18a04c;box-shadow:0 0 0 4px rgba(24,160,76,.12)}
+.mpesa-pay-btn{width:100%;margin-top:8px;border:none;border-radius:18px;padding:16px 18px;background:linear-gradient(135deg,#18a04c 0%,#0e7a35 100%);color:#fff;cursor:pointer;font-weight:900;font-size:16px;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 16px 30px rgba(14,122,53,.24);transition:transform .2s ease,box-shadow .2s ease,filter .2s ease}
+.mpesa-pay-btn:hover{transform:translateY(-1px);box-shadow:0 20px 34px rgba(14,122,53,.28);filter:brightness(1.03)}
+.mpesa-pay-btn:active{transform:translateY(0)}
+.mpesa-pay-label{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.mpesa-spinner{display:flex;align-items:center;gap:10px;margin-top:12px;font-size:13px;color:var(--muted)}
+.spinner-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:spin 0.8s linear infinite}
+.mpesa-spinner-text{color:var(--fg)}
+
+/* ===== ACCOUNT =====
+   Storefront auth card now supports backend login/register and a simple signed-in summary. */
+.account-layout{max-width:600px;margin:0 auto;padding:48px 16px}
+.auth-form{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px}
+.auth-form h2{text-align:center;margin-bottom:24px}
+.auth-tabs{display:flex;margin-bottom:24px;border-bottom:1px solid var(--border)}
+.auth-tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+.auth-tab.active{border-bottom-color:var(--accent);color:var(--accent)}
+.auth-form-logged-in{max-width:520px;margin:0 auto}
+.account-badge{display:inline-flex;align-items:center;justify-content:center;padding:6px 12px;border-radius:999px;background:var(--secondary);color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin:0 auto 16px}
+.account-copy{text-align:center;color:var(--muted);margin:-8px 0 24px}
+.account-summary{display:grid;gap:12px;margin-bottom:24px}
+.account-summary-row{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 16px;border:1px solid var(--border);border-radius:16px;background:rgba(255,255,255,.6)}
+.account-summary-row span{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.account-summary-row strong{font-size:14px;color:var(--primary)}
+
+/* ===== WISHLIST =====
+   Kept minimal because it mostly reuses the shared product grid styles. */
+.wishlist-page{padding:48px 0}
+
+/* ===== FOOTER =====
+   Dark contrasting block at the bottom that groups supporting content away from the shopping flow. */
+.footer{background:var(--primary);color:var(--primary-fg);margin-top:80px;padding:64px 0 0}
+.footer-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px}
+.footer-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;margin-bottom:12px}
+.footer-logo img{height:80px;width:120px;display:block;object-fit:contain}
+.footer-desc{font-size:13px;opacity:.7;line-height:1.6}
+.social-icons{display:flex;gap:12px;margin-top:16px}
+.social-icon{width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;color:#fff;opacity:.85;transition:opacity .2s}
+.social-icon:hover{opacity:1}
+.social-icon svg{width:22px;height:22px;fill:currentColor}
+
+/* WhatsApp badge using the official glyph
+   Styled separately so it keeps the familiar brand look inside the generic social icon row. */
+.social-icon.whatsapp-icon{
+  position:relative;
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#25d366;
+  box-shadow:0 8px 18px rgba(37,211,102,.28);
+  border:1px solid #b3f3c9;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+.social-icon.whatsapp-icon svg{
+  width:18px;
+  height:18px;
+  display:block;
+  fill:#fff;
+}
+.footer h4{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;margin-bottom:16px}
+.footer a{display:block;font-size:13px;opacity:.7;padding:3px 0;transition:opacity .2s}
+.footer a:hover{opacity:1}
+.footer-bottom{border-top:1px solid rgba(255,255,255,.15);margin-top:40px;padding:20px 0;display:flex;justify-content:space-between;font-size:12px;opacity:.5}
+.footer-bottom div{display:flex;gap:20px}
+
+/* ===== TOAST =====
+   Small floating feedback message shown temporarily for user actions. */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--primary);color:var(--primary-fg);padding:12px 24px;border-radius:var(--radius);font-size:13px;transform:translateY(100px);opacity:0;transition:all .3s;z-index:999}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* ===== RESPONSIVE =====
+   These breakpoints progressively simplify layouts for tablets and phones
+   instead of trying to shrink the desktop layout unchanged. */
+@media(max-width:1024px){
+  .product-grid{grid-template-columns:repeat(3,1fr)}
+}
+@media(max-width:768px){
+  .nav-desktop{display:none}
+  .mobile-menu-btn{display:flex;align-items:center;justify-content:center}
+  .header-inner{height:84px}
+  .header-actions{min-width:auto;gap:2px}
+  .search-chip.open{width:min(58vw,190px)}
+  .hero{height:55vh}
+  .hero-text{padding-left:20px}
+  .product-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .categories-grid{grid-template-columns:repeat(2,1fr)}
+  .footer-grid{grid-template-columns:repeat(2,1fr)}
+  .shop-layout{grid-template-columns:1fr}
+  .shop-sidebar{display:none}
+  .shop-sidebar.open{display:flex;position:fixed;left:0;top:0;bottom:0;width:280px;z-index:200;background:var(--bg);padding:24px;overflow-y:auto;box-shadow:4px 0 20px rgba(0,0,0,.1)}
+  .mobile-filter-btn{display:inline-flex}
+  .product-detail{grid-template-columns:1fr}
+  .review-grid{grid-template-columns:1fr}
+  .review-summary{position:relative;top:auto}
+  .cart-layout{grid-template-columns:1fr}
+  .promo-banner{height:200px}
+  .promo-banner-overlay{padding:0 24px}
+  .hero-arrows button{display:none}
+  .footer-bottom{flex-direction:column;gap:8px;text-align:center}
+}
+@media(max-width:480px){
+  .search-chip.open{width:140px;padding:0 8px 0 10px}
+  .product-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+  .product-card-info{padding:8px}
+  .product-name{font-size:12px}
+  .product-price{font-size:12px}
+  .categories-grid{grid-template-columns:1fr 1fr}
+}
+
+/* ===== ANIMATIONS =====
+   Lightweight motion helpers reused by the hero and M-Pesa demo spinner. */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fade-in{animation:fadeIn .5s ease forwards}
+.top-bar{animation:fadeIn .5s ease forwards}

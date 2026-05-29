@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MAISON — Luxury Fashion</title>
+  <meta name="description" content="Curated luxury fashion for the modern individual. Quality craftsmanship meets timeless design.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- TOP BAR -->
+  <div class="top-bar">FREE SHIPPING ON ORDERS OVER Ksh 8000 | USE CODE <strong>SAVE10</strong></div>
+
+  <!-- HEADER
+       This stays visible while the user scrolls.
+       It acts like the "control center" of the storefront:
+       brand/logo, top-level navigation, quick search, wishlist, cart, and account access. -->
+  <header class="header" id="header">
+    <div class="container header-inner">
+      <button class="mobile-menu-btn" id="menuBtn">&#9776;</button>
+      <a href="#" class="logo" onclick="navigate('home')">
+        <img src="assets/logo.png" alt="MAISON">
+      </a>
+      <!-- Desktop navigation:
+           These links do not open separate HTML pages.
+           They call `navigate(...)` in app.js, which swaps the content inside <main id="app">. -->
+      <nav class="nav-desktop" id="navDesktop">
+        <a href="#" onclick="navigate('shop','Men')">Men</a>
+        <a href="#" onclick="navigate('shop','Women')">Women</a>
+        <a href="#" onclick="navigate('shop','Kids')">Kids</a>
+        <a href="#" onclick="navigate('shop','Shoes')">Shoes</a>
+        <a href="#" onclick="navigate('shop','Accessories')">Accessories</a>
+        <a href="#" class="sale-link" onclick="navigate('shop','Sale')">Sale</a>
+      </nav>
+      <!-- Header action icons:
+           Search opens an inline search field.
+           Wishlist/cart/account update the app state or switch the current view. -->
+      <div class="header-actions">
+        <button class="icon-btn search-toggle" id="searchToggleBtn" onclick="toggleSearch()" title="Search" aria-label="Open search">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><line x1="13" y1="13" x2="17" y2="17"/></svg>
+        </button>
+        <!-- Compact search UI:
+             This is hidden/collapsed by default and expanded by JavaScript when the search icon is clicked. -->
+        <div class="search-chip" id="searchBar" aria-hidden="true">
+          <input type="text" id="searchInput" placeholder="Search..." onkeyup="handleSearch(event)" aria-label="Search products">
+          <button class="search-close-btn" type="button" onclick="toggleSearch(false)" aria-label="Close search">&#10005;</button>
+        </div>
+        <button class="icon-btn" onclick="navigate('wishlist')" title="Wishlist">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21C12 21 3 13.5 3 8.5C3 5.42 5.42 3 8.5 3C10.24 3 11.91 3.81 12 5C12.09 3.81 13.76 3 15.5 3C18.58 3 21 5.42 21 8.5C21 13.5 12 21 12 21Z" transform="scale(0.75)"/></svg>
+          <span class="badge" id="wishlistBadge" style="display:none">0</span>
+        </button>
+        <button class="icon-btn" onclick="navigate('cart')" title="Cart">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" transform="scale(0.75)"/><line x1="2.25" y1="4.5" x2="16.5" y2="4.5"/><path d="M12 6.75C12 8.82 10.32 10.5 8.25 10.5C6.18 10.5 4.5 8.82 4.5 6.75" transform="translate(0.75,0)"/></svg>
+          <span class="badge" id="cartBadge" style="display:none">0</span>
+        </button>
+        <button class="icon-btn" onclick="navigate('account')" title="Account">
+          <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 14.25C15 12.18 13.32 10.5 11.25 10.5C9.18 10.5 7.5 12.18 7.5 14.25" transform="translate(-2,-1)"/><circle cx="9" cy="6" r="3"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="search-bar legacy-search-bar" id="legacySearchBar" style="display:none" aria-hidden="true">
+      <div class="container"><input type="text" id="legacySearchInput" placeholder="Search products..."><button type="button">x</button></div>
+    </div>
+  </header>
+
+  <!-- MOBILE NAV
+       This overlay is only used on smaller screens.
+       The menu button adds the `open` class, and each link both navigates and closes the panel. -->
+  <div class="mobile-nav-overlay" id="mobileNav">
+    <div class="mobile-nav-panel">
+      <button class="mobile-nav-close" onclick="closeMobileNav()">✕</button>
+      <h3>Menu</h3>
+      <a href="#" onclick="navigate('shop','Men');closeMobileNav()">Men</a>
+      <a href="#" onclick="navigate('shop','Women');closeMobileNav()">Women</a>
+      <a href="#" onclick="navigate('shop','Kids');closeMobileNav()">Kids</a>
+      <a href="#" onclick="navigate('shop','Shoes');closeMobileNav()">Shoes</a>
+      <a href="#" onclick="navigate('shop','Accessories');closeMobileNav()">Accessories</a>
+      <a href="#" class="sale-link" onclick="navigate('shop','Sale');closeMobileNav()">Sale</a>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT
+       This is the placeholder where app.js renders every "page" as HTML strings.
+       Home, shop, product detail, cart, checkout, account, and reviews all appear here. -->
+  <main id="app"></main>
+
+  <!-- FOOTER
+       This is static site-wide content:
+       brand text, social links, support links, newsletter form, and legal information. -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h3 class="footer-logo"><img src="assets/logo.png" alt="MAISON"></h3>
+          <p class="footer-desc">Curated luxury fashion for the modern individual. Quality craftsmanship meets timeless design.</p>
+          <!-- Social icons:
+               These are simple anchor tags with SVG icons so they stay lightweight and easy to style. -->
+          <div class="social-icons" aria-label="Social media">
+            <a class="social-icon" href="#" aria-label="Facebook">
+              <svg viewBox="0 0 24 24" role="img"><path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 5.012 3.676 9.163 8.438 9.878v-6.987H8.077v-2.89h2.361V9.845c0-2.332 1.394-3.622 3.53-3.622.102 0 .204.002.306.006 1.163.05 1.39.073 1.633.106v2.312h-1.12c-1.104 0-1.377.525-1.377 1.292v1.962h2.754l-.359 2.89h-2.395V21.88C18.324 21.163 22 17.012 22 12z"/></svg>
+            </a>
+            <a class="social-icon" href="https://www.instagram.com/onsboskingsly?igsh=b3V5Z211NDhtZXA2" aria-label="Instagram">
+              <svg viewBox="0 0 24 24" role="img"><path d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4zm0 2a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h10a2 2 0 0 0 2-2V7c0-1.1-.9-2-2-2H7zm5 2.5A4.5 4.5 0 1 1 7.5 12 4.5 4.5 0 0 1 12 7.5zm0 2A2.5 2.5 0 1 0 14.5 12 2.5 2.5 0 0 0 12 9.5zm5.25-2.75a1 1 0 1 1-1 1 1 1 0 0 1 1-1z"/></svg>
+            </a>
+            <a class="social-icon" href="#" aria-label="X">
+              <svg viewBox="0 0 24 24" role="img"><path d="M4 4h3.5l4.07 5.36L15.6 4H20l-5.83 7.62L20 20h-3.5l-4.32-5.66L7.9 20H4l6.02-8.02L4 4z"/></svg>
+            </a>
+            <a class="social-icon" href="#" aria-label="YouTube">
+              <svg viewBox="0 0 24 24" role="img"><path d="M21.6 7.2a2.4 2.4 0 0 0-1.69-1.69C18.08 5 12 5 12 5s-6.08 0-7.91.51A2.4 2.4 0 0 0 2.4 7.2 25.3 25.3 0 0 0 2 12a25.3 25.3 0 0 0 .4 4.8 2.4 2.4 0 0 0 1.69 1.69C5.92 19 12 19 12 19s6.08 0 7.91-.51a2.4 2.4 0 0 0 1.69-1.69A25.3 25.3 0 0 0 22 12a25.3 25.3 0 0 0-.4-4.8zM10 15.5v-7l6 3.5-6 3.5z"/></svg>
+            </a>
+
+            
+            <a class="social-icon whatsapp-icon" href="https://wa.me/254791318109?text=Hello%20I%20want%20to%20buy" target="_blank" rel="noopener" aria-label="WhatsApp">
+              <svg viewBox="0 0 32 32" aria-hidden="true">
+                <path d="M16 2.667A13.32 13.32 0 0 0 2.667 16a13.2 13.2 0 0 0 1.93 6.838L2.667 29.333 9.2 27.4A13.3 13.3 0 0 0 16 29.333 13.333 13.333 0 0 0 29.333 16 13.333 13.333 0 0 0 16 2.667Zm0 23.466a10.08 10.08 0 0 1-5.14-1.412l-.368-.22-3.429.9.916-3.347-.237-.389A10.12 10.12 0 1 1 26.08 16 10.107 10.107 0 0 1 16 26.133Zm5.502-7.56c-.297-.149-1.76-.868-2.033-.967s-.47-.15-.67.15-.767.967-.94 1.165-.346.22-.643.074a8.27 8.27 0 0 1-2.439-1.505 9.1 9.1 0 0 1-1.7-2.112c-.179-.297-.02-.458.134-.605.14-.137.32-.356.479-.534a.64.64 0 0 0 .1-.582c-.074-.149-.67-1.606-.92-2.21s-.508-.51-.7-.52l-.6-.01c-.2 0-.532.074-.812.37s-1.066 1.041-1.066 2.538 1.091 2.944 1.243 3.15 2.149 3.286 5.211 4.607c.729.316 1.295.505 1.737.647a4.16 4.16 0 0 0 1.9.12c.579-.086 1.78-.727 2.033-1.431s.253-1.289.177-1.41-.268-.2-.565-.345Z" />
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4>Shop</h4>
+          <a href="#" onclick="navigate('shop','Women')">Women</a>
+          <a href="#" onclick="navigate('shop','Men')">Men</a>
+          <a href="#" onclick="navigate('shop','Kids')">Kids</a>
+          <a href="#" onclick="navigate('shop','Shoes')">Shoes</a>
+          <a href="#" onclick="navigate('shop','Accessories')">Accessories</a>
+        </div>
+        <div>
+          <h4>Help</h4>
+          <a href="#">FAQ</a><a href="#">Return Policy</a><a href="#">Shipping Info</a><a href="https://wa.me/254791318109">Chat With Us</a>
+        
+          <a href="#" onclick="navigate('PrivacyPolicy'); return false;">Privacy Policy</a>
+
+        </div>
+        <div>
+          <h4>Newsletter</h4>
+          <p class="footer-desc">Subscribe for exclusive offers and new arrivals.</p>
+          <div class="newsletter-form">
+            <input type="email" placeholder="Your email">
+            <button class="btn btn-accent">JOIN</button>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 MAISON. All rights reserved, Developed by Group 7 <br>&copy;DEVELOPERS/DESIGNERS: Dev MIKE, Faith, Trevor, Kenisha ,Linet</p>
+        <div>
+          <a href="#" onclick="navigate('PrivacyPolicy'); return false;">Privacy Policy</a>
+
+
+          <a href="#">Terms</a><a href="#">Cookies</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- TOAST
+       app.js writes messages into this element and briefly shows it for feedback like:
+       "added to cart", "invalid coupon", or "out of stock". -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Script order matters:
+       store-data.js provides shared data helpers first,
+       then app.js uses those helpers to render the storefront and attach interactivity. -->
+  <script src="store-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
